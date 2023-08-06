@@ -1,0 +1,409 @@
+openapi: 3.1.0
+x-stoplight:
+  id: eykrq5v9133hi
+info:
+  title: RESTful API Specifications
+  version: 0.1.0
+  license:
+    name: CC BY-NC-ND 4.0
+    url: 'https://creativecommons.org/licenses/by-nc-nd/4.0/'
+  description: 'This documentation is intended to expose endpoint specifications, technical standards, and glossary of terms.'
+  contact:
+    name: Jin Bok
+    email: jinbok@quatredeux.com
+    url: 'mailto:jinbok@quatredeux.com'
+servers:
+  - url: 'http://127.0.0.1:8000/api'
+    description: localhost
+paths:
+  /v1/departments:
+    get:
+      summary: Index Departments
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    x-stoplight:
+                      id: cvsr7qk6hyvh8
+                    minItems: 0
+                    uniqueItems: true
+                    maxItems: 15
+                    items:
+                      $ref: '#/components/schemas/Department'
+                      x-stoplight:
+                        id: tfuf549vlr0kg
+                  links:
+                    type: object
+                    x-stoplight:
+                      id: ji88qawwpma3p
+                    minProperties: 4
+                    maxProperties: 4
+                    additionalProperties: false
+                    required:
+                      - first
+                      - last
+                      - prev
+                      - next
+                    properties:
+                      first:
+                        type: string
+                        x-stoplight:
+                          id: 78zvy6mf8ol54
+                        format: uri
+                        readOnly: true
+                      last:
+                        type: string
+                        x-stoplight:
+                          id: fk5v3wst21kq4
+                        format: uri
+                        readOnly: true
+                      prev:
+                        type: string
+                        x-stoplight:
+                          id: jvf35o90ajaet
+                        format: uri
+                        readOnly: true
+                      next:
+                        type: string
+                        x-stoplight:
+                          id: ad5v4zax77xkq
+                        format: uri
+                        readOnly: true
+                  meta:
+                    type: object
+                    x-stoplight:
+                      id: cn9rhmq98cv04
+                    minProperties: 8
+                    maxProperties: 8
+                    additionalProperties: false
+                    required:
+                      - current_page
+                      - from
+                      - last_page
+                      - links
+                      - path
+                      - per_page
+                      - to
+                      - total
+                    properties:
+                      current_page:
+                        type: integer
+                        x-stoplight:
+                          id: rpmcolyuw3aq1
+                        format: int32
+                        minimum: 1
+                        readOnly: true
+                      from:
+                        type: integer
+                        x-stoplight:
+                          id: tlh9adevjjgx7
+                        format: int32
+                        minimum: 1
+                        readOnly: true
+                      last_page:
+                        type: integer
+                        x-stoplight:
+                          id: xkpe7fosknjxz
+                        format: int32
+                        minimum: 1
+                        readOnly: true
+                      links:
+                        type: array
+                        x-stoplight:
+                          id: bmjh85iqzr6ib
+                        minItems: 3
+                        uniqueItems: true
+                        items:
+                          x-stoplight:
+                            id: 65ftx0zhr08i5
+                          type: object
+                          minProperties: 3
+                          maxProperties: 3
+                          additionalProperties: false
+                          properties:
+                            url:
+                              type: string
+                              x-stoplight:
+                                id: 3dlquhmxca9ly
+                              format: uri
+                              readOnly: true
+                            label:
+                              type: string
+                              x-stoplight:
+                                id: 8ne8atv2mvr2a
+                              minLength: 1
+                              readOnly: true
+                            active:
+                              type: boolean
+                              x-stoplight:
+                                id: a5zni8gjt1phh
+                              readOnly: true
+                          required:
+                            - url
+                            - label
+                            - active
+                      path:
+                        type: string
+                        x-stoplight:
+                          id: tm5ckeq0gxju1
+                        format: uri
+                        readOnly: true
+                      per_page:
+                        type: integer
+                        x-stoplight:
+                          id: wdg1eegrg79iz
+                        format: int32
+                        default: 15
+                        minimum: 1
+                        maximum: 100
+                        readOnly: true
+                      to:
+                        type: integer
+                        x-stoplight:
+                          id: 5fvp08griy4ft
+                        format: int32
+                        maximum: 100
+                        minimum: 1
+                        readOnly: true
+                      total:
+                        type: integer
+                        x-stoplight:
+                          id: 5eypyhynekscy
+                        format: int32
+                        minimum: 0
+                        readOnly: true
+                required:
+                  - data
+                  - links
+                  - meta
+      operationId: get-v1-departments
+      x-stoplight:
+        id: 0hj3djbcum28i
+    post:
+      summary: Store Department
+      operationId: post-v1-departments
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Department'
+                    x-stoplight:
+                      id: nzwba6jon3bbb
+                required:
+                  - data
+        '422':
+          $ref: '#/components/responses/422'
+      x-stoplight:
+        id: 6ghuvwhklcpom
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  x-stoplight:
+                    id: pvtothge6q17y
+                  maxLength: 50
+                  minLength: 1
+                  writeOnly: true
+              required:
+                - name
+  '/v1/departments/{id}':
+    parameters:
+      - schema:
+          type: integer
+          format: int64
+          minimum: 1
+        name: id
+        in: path
+        required: true
+        description: Department identifier.
+    get:
+      summary: Show Department by ID
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Department'
+                    x-stoplight:
+                      id: xufeb69nx58ut
+                required:
+                  - data
+        '404':
+          description: Not Found
+      operationId: get-v1-departments-id
+      x-stoplight:
+        id: 7q3ot84ahk7n6
+    put:
+      summary: Update Department by ID
+      operationId: put-v1-departments-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Department'
+                    x-stoplight:
+                      id: cv2qq6cjc0si3
+                required:
+                  - data
+        '404':
+          description: Not Found
+        '422':
+          $ref: '#/components/responses/422'
+      x-stoplight:
+        id: snllu20sls5da
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  x-stoplight:
+                    id: vwkdkz3ojdreq
+                  minLength: 1
+                  maxLength: 50
+                  writeOnly: true
+              required:
+                - name
+    patch:
+      summary: Update Department by ID
+      operationId: patch-v1-departments-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Department'
+                    x-stoplight:
+                      id: b8f0775cufi7f
+                required:
+                  - data
+        '404':
+          description: Not Found
+        '422':
+          $ref: '#/components/responses/422'
+      x-stoplight:
+        id: g5arvg5mnzuib
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  x-stoplight:
+                    id: cc42xks6n6g1l
+                  minLength: 1
+                  maxLength: 50
+              required:
+                - name
+    delete:
+      summary: Destroy Department by ID
+      operationId: delete-v1-departments-id
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+      x-stoplight:
+        id: 0dmk8o83aqct9
+components:
+  schemas:
+    Department:
+      title: Department
+      x-stoplight:
+        id: czreva53ofd1x
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          minimum: 1
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        deleted_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+        - id
+        - name
+        - created_at
+        - updated_at
+        - deleted_at
+  securitySchemes: {}
+  responses:
+    '422':
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                type: object
+                x-stoplight:
+                  id: ldijxzzlvxe4j
+                minProperties: 1
+                required:
+                  - name
+                properties:
+                  name:
+                    type: array
+                    x-stoplight:
+                      id: prjxki7i02q33
+                    minItems: 1
+                    items:
+                      x-stoplight:
+                        id: vzjbfw43hicqy
+                      type: string
+                      readOnly: true
+            required:
+              - errors
+        application/xml:
+          schema:
+            type: object
+            properties: {}
+
