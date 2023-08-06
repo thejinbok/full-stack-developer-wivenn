@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Requests\StoreDepartmentRequest;
-use App\Http\Requests\UpdateDepartmentRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\StoreDepartmentRequest;
+use App\Http\Requests\V1\UpdateDepartmentRequest;
+use App\Http\Resources\V1\DepartmentResource;
 use App\Models\Department;
 
 class DepartmentController extends Controller
@@ -13,7 +15,7 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        //
+        return DepartmentResource::collection(Department::paginate());
     }
 
     /**
@@ -21,7 +23,9 @@ class DepartmentController extends Controller
      */
     public function store(StoreDepartmentRequest $request)
     {
-        //
+        $department = Department::create($request->validated());
+
+        return new DepartmentResource($department);
     }
 
     /**
@@ -29,7 +33,7 @@ class DepartmentController extends Controller
      */
     public function show(Department $department)
     {
-        //
+        return new DepartmentResource($department);
     }
 
     /**
@@ -37,7 +41,9 @@ class DepartmentController extends Controller
      */
     public function update(UpdateDepartmentRequest $request, Department $department)
     {
-        //
+        $department->update($request->validated());
+
+        return new DepartmentResource($department);
     }
 
     /**
@@ -45,6 +51,8 @@ class DepartmentController extends Controller
      */
     public function destroy(Department $department)
     {
-        //
+        $department->delete();
+
+        return response()->noContent();
     }
 }
