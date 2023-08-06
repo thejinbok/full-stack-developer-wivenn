@@ -54,4 +54,28 @@ class DepartmentControllerTest extends TestCase
 
         $response->assertJsonCount(5, 'data');
     }
+
+    public function test_departments_store_endpoint_works(): void
+    {
+        $response = $this->postJson('/api/v1/departments', ['name' => 'Whatever']);
+
+        $response->assertStatus(201);
+
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'name',
+                'created_at',
+                'updated_at',
+            ],
+        ]);
+
+        $response->assertJson([
+            'data' => [
+                'name' => 'Whatever',
+            ],
+        ]);
+
+        $this->assertDatabaseHas(Department::class, $response->json()['data']);
+    }
 }
