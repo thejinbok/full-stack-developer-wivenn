@@ -146,4 +146,15 @@ class DepartmentControllerTest extends TestCase
 
         $this->assertDatabaseHas(Department::class, $response->json()['data']);
     }
+
+    public function test_departments_destroy_endpoint_works(): void
+    {
+        $department = Department::factory()->create();
+
+        $response = $this->deleteJson('/api/v1/departments/' . $department->id);
+
+        $response->assertStatus(204);
+
+        $this->assertModelExists($department);
+    }
 }
