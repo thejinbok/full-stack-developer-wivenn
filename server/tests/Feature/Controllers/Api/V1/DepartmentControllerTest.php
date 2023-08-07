@@ -97,4 +97,53 @@ class DepartmentControllerTest extends TestCase
             ],
         ]);
     }
+
+    public function test_departments_update_endpoint_works(): void
+    {
+        $department = Department::factory()->create();
+
+        $response = $this->putJson('/api/v1/departments/' . $department->id, ['name' => 'Whatever']);
+
+        $response->assertStatus(200);
+
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'name',
+                'created_at',
+                'updated_at',
+                'deleted_at',
+            ],
+        ]);
+
+        $response->assertJson([
+            'data' => [
+                'name' => 'Whatever',
+            ],
+        ]);
+
+        $this->assertDatabaseHas(Department::class, $response->json()['data']);
+
+        $response = $this->patchJson('/api/v1/departments/' . $department->id, ['name' => 'revetahW']);
+
+        $response->assertStatus(200);
+
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'name',
+                'created_at',
+                'updated_at',
+                'deleted_at',
+            ],
+        ]);
+
+        $response->assertJson([
+            'data' => [
+                'name' => 'revetahW',
+            ],
+        ]);
+
+        $this->assertDatabaseHas(Department::class, $response->json()['data']);
+    }
 }
